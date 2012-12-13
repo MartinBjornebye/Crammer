@@ -94,13 +94,24 @@ namespace Crammer
                 (Application.Current as App).CurrentDictionary.Entries = mDictEntries;
 
                 string newDictPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, mDictionaryTitle + CrammerDictionary.DICT_EXTENSION);
+                (Application.Current as App).CurrentDictionary.DictionaryFile = newDictPath;
+                (Application.Current as App).CurrentDictionary.createStateFile();
 
                 await (Application.Current as App).CurrentDictionary.create(mDictionaryTitle + CrammerDictionary.DICT_EXTENSION);
                 ApplicationData.Current.LocalSettings.Values[SettingsFile.CURRENT_DICT_NODE] = newDictPath;
                 (Application.Current as App).PageVisited = "NewDictionary";
 
-                this.GoHome(this, null);
-
+                if ((Application.Current as App).CurrentDictionary.Entries.Count == 0)
+                {
+                    if (this.Frame != null)
+                    {
+                        this.Frame.Navigate(typeof(ManageEntries));
+                    }
+                }
+                else
+                {
+                    this.GoHome(this, null);
+                }
             }
             catch (Exception ex)
             {

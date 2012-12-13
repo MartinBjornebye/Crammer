@@ -38,8 +38,8 @@
                 <ColumnDefinition Width="605*"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Grid.Column="0" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="25,0,0,28" Height="56" Width="65"/>
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="{StaticResource AppName}" Foreground="#FF063C93" Height="60" FontSize="60" />
-            <TextBlock Grid.Column="1" Text="Smart Memorizer" Margin="8"  FontSize="20" Foreground="#FF04388B" VerticalAlignment="Bottom" Height="24"/>
+            <TextBlock x:Name="pageTitle" Grid.Column="1" Grid.ColumnSpan="3" Text="{StaticResource AppName}" Foreground="#FF063C93" Height="60" FontSize="60" />
+            <TextBlock Grid.Column="1" Text="Smart Memorizer" Grid.ColumnSpan="3" Margin="8"  FontSize="20" Foreground="#FF04388B" VerticalAlignment="Bottom" Height="24"/>
             <Grid Grid.Column="3">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -48,9 +48,9 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Dictionary Title:" VerticalAlignment="Center" Grid.Row="2" Foreground="Black" FontWeight="Normal" HorizontalAlignment="Right" Margin="4" FontSize="16"></TextBlock>
-                <TextBlock Text="Total Entries:" VerticalAlignment="Center" Grid.Row="3" Foreground="Black" FontWeight="Normal" HorizontalAlignment="Right" Margin="4" FontSize="16"></TextBlock>
-                <TextBlock Text="Active Entries:" VerticalAlignment="Center" Grid.Row="4" Foreground="Black" FontWeight="Normal" HorizontalAlignment="Right" Margin="4" FontSize="16"></TextBlock>
+                <TextBlock Text="Dictionary Title:" VerticalAlignment="Center" Grid.Row="2" Foreground="Black" FontWeight="Normal" HorizontalAlignment="Right" Margin="4" FontSize="20"></TextBlock>
+                <TextBlock Text="Total Entries:" VerticalAlignment="Center" Grid.Row="3" Foreground="Black" FontWeight="Normal" HorizontalAlignment="Right" Margin="4" FontSize="20"></TextBlock>
+                <TextBlock Text="Active Entries:" VerticalAlignment="Center" Grid.Row="4" Foreground="Black" FontWeight="Normal" HorizontalAlignment="Right" Margin="4" FontSize="20"></TextBlock>
             </Grid>
             <Grid Grid.Column="4">
                 <Grid.RowDefinitions>
@@ -60,9 +60,9 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Name="txtDictionaryTitle" Text="" VerticalAlignment="Center" Grid.Row="2" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Left" Margin="4" FontSize="16"></TextBlock>
-                <TextBlock Name="txtTotal" Text="" VerticalAlignment="Center" Grid.Row="3" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Left" Margin="4" FontSize="16"></TextBlock>
-                <TextBlock Name="txtActive" Text="" VerticalAlignment="Center" Grid.Row="4" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Left" Margin="4" FontSize="16"></TextBlock>
+                <TextBlock Name="txtDictionaryTitle" Text="" VerticalAlignment="Center" Grid.Row="2" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Left" Margin="4" FontSize="20"></TextBlock>
+                <TextBlock Name="txtTotal" Text="" VerticalAlignment="Center" Grid.Row="3" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Left" Margin="4" FontSize="20"></TextBlock>
+                <TextBlock Name="txtActive" Text="" VerticalAlignment="Center" Grid.Row="4" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Left" Margin="4" FontSize="20"></TextBlock>
             </Grid>
         </Grid>
         <Grid Grid.Row="1" Margin="10, 10, 10, 10">
@@ -86,11 +86,11 @@
                     <RowDefinition Height="50*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="Dictionary" VerticalAlignment="Center" Grid.Row="1" Foreground="White" HorizontalAlignment="Left" Margin="40,0,0,0" FontSize="40"></TextBlock>
-                <ContentControl Name="menuNewDict" Content="New..." FontSize="28" Foreground="White" HorizontalAlignment="Left" Margin="100,10,0,4" Grid.Row="2" VerticalAlignment="Center" Height="41" Width="109" Tapped="menuNewDict_Tapped_1" />
-                <ContentControl Name="menuOpenDict" Content="Open..." FontSize="28" Foreground="White" HorizontalAlignment="Left" Margin="100,10,0,4" Grid.Row="3" VerticalAlignment="Center" Height="41" Width="109" Tapped="menuOpenDict_Tapped_1" />
-                <ContentControl Name="menuEditDict" Content="Edit..." FontSize="28" Foreground="White" HorizontalAlignment="Left" Margin="100,10,0,4" Grid.Row="4" VerticalAlignment="Center" Height="41" Width="109" Tapped="menuEditDict_Tapped_1" />
-                <ContentControl Name="menuFlipSequence" Content="Switch Order" FontSize="28" Foreground="White" HorizontalAlignment="Left" Grid.Row="6" VerticalAlignment="Center" Height="41" Width="162" Tapped="menuFlipSequence_Tapped_1" Margin="100,6,0,45" Grid.RowSpan="2" />
-                <ContentControl Name="menuStartOver" Content="Start Over" FontSize="28" Foreground="White" HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Center" Height="41" Width="156" Tapped="menuStartOver_Tapped_1" Margin="100,6,0,45" Grid.RowSpan="2" />
+                <ContentControl Name="menuNewDict" Content="New..." FontSize="28" Foreground="White" HorizontalAlignment="Left" Margin="80,10,0,4" Grid.Row="2" VerticalAlignment="Center" Height="41" Width="109" Tapped="menuNewDict_Tapped_1" />
+                <ContentControl Name="menuOpenDict" Content="Open..." FontSize="28" Foreground="White" HorizontalAlignment="Left" Margin="80,10,0,4" Grid.Row="3" VerticalAlignment="Center" Height="41" Width="109" Tapped="menuOpenDict_Tapped_1" />
+                <ContentControl Name="menuEditDict" Content="Edit..." FontSize="28" Foreground="White" HorizontalAlignment="Left" Margin="80,10,0,4" Grid.Row="4" VerticalAlignment="Center" Height="41" Width="109" Tapped="menuEditDict_Tapped_1" />
+                <ContentControl Name="menuFlipSequence" Content="Switch Order" FontSize="28" Foreground="White" HorizontalAlignment="Left" Grid.Row="6" VerticalAlignment="Center" Height="41" Width="162" Tapped="menuFlipSequence_Tapped_1" Margin="80,6,0,45" Grid.RowSpan="2" />
+                <ContentControl Name="menuStartOver" Content="Start Over" FontSize="28" Foreground="White" HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Center" Height="41" Width="156" Tapped="menuStartOver_Tapped_1" Margin="80,6,0,45" Grid.RowSpan="2" />
             </Grid>
             <Border Grid.Column="1" BorderBrush="DarkGray" BorderThickness="2" Margin="10,10,10,10">
             <Grid Name="GridOutput" Grid.Column="1" Background="White" Margin="10,10,10,10">

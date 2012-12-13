@@ -30,6 +30,7 @@ namespace MB.Crammer
         private int mKnownWords = 0;			// Count of completed words
         private int mStart = 0;				    // Index used for fetching new words
         private int mCurrentWord = 0;		    // Crammer database cursor (index)
+
         private int mInSystem = 0;			    // Count of words currently in the system
         private bool mRestoredState = false;	// Session restored from a previous session
 
@@ -38,6 +39,14 @@ namespace MB.Crammer
         private bool mReachedEnd = false;
         #endregion
 
+        #region Properties
+        public int CurrentEntry
+        {
+            get { return mCurrentWord; }
+            set { mCurrentWord = value; }
+        }
+        
+        #endregion
         public PickEngine(CrammerDictionary dict, bool cleanState)
         {
             mCrammerDict = dict;
@@ -57,8 +66,6 @@ namespace MB.Crammer
         {
             cleanUp();
 
-            //mCurrentWord = 0;
-
             mTotalWords = 0;
             mKnownWords = 0;
             mStart = 0;
@@ -66,7 +73,6 @@ namespace MB.Crammer
             mRestoredState = false;
             mNewWordsInUse = true;
             mReachedEnd = false;
-            // init(true); Commented out Dec. 9
         }
 
         public void execute()
@@ -382,7 +388,6 @@ namespace MB.Crammer
                 // Assume mismatch with chamber-size config and contents of .STA file.
                 // Delete it so that the dictionary will load successfully next time.
                 mCrammerDict.removeStateFile();
-                throw;
             }
 
             mRestoredState = true;

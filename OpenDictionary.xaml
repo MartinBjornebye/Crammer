@@ -40,17 +40,19 @@
 
         <Grid Grid.Row="1" Background="#FF063C93" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300*" />
-                <ColumnDefinition Width="200*" />
-                <ColumnDefinition Width="200*" />
-                <ColumnDefinition Width="155*" />
-                <ColumnDefinition Width="155*" />
+                <ColumnDefinition Width="406*" />
+                <ColumnDefinition Width="197" />
+                <ColumnDefinition Width="197" />
+                <ColumnDefinition Width="65"  />
+                <ColumnDefinition Width="292*" />
+                <ColumnDefinition Width="209*" />
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Available Dictionaries" Foreground="White" FontWeight="Bold" HorizontalAlignment="Left" FontSize="30" Margin="4,22,0,22" Grid.Column="0" TextWrapping="NoWrap" VerticalAlignment="Center" Height="36" Width="305"/>
-            <Button Name="OpenSelected" Content="Open Selected" Click="OpenSelected_Click_1" Grid.Column="1" FontSize="25" Foreground="White" HorizontalAlignment="Left" Margin="4" VerticalAlignment="Center"/>
-            <Button Name="OpenExternal" Content="Open External" Click="OpenExternal_Click_1" Grid.Column="2" FontSize="25" Foreground="White" HorizontalAlignment="Left" Margin="4" VerticalAlignment="Center"/>
+            <TextBlock Text="Available Dictionaries" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" FontSize="30" Margin="4,17,0,17" Grid.Column="0" TextWrapping="NoWrap" VerticalAlignment="Center" Height="36" Width="305"/>
+            <Button Name="OpenSelected" Content="Open Selected" Click="OpenSelected_Click_1" Grid.Column="1" FontSize="25" Foreground="White" HorizontalAlignment="Left" Margin="4,11,0,11" VerticalAlignment="Center" Height="48" Width="195" Grid.ColumnSpan="2"/>
+            <Button Name="OpenExternal" Content="Open External" Click="OpenExternal_Click_1" Grid.Column="2" FontSize="25" Foreground="White" HorizontalAlignment="Left" Margin="4,11,0,11" VerticalAlignment="Center" Height="48" Width="195"/>
+            <Button Name="Remove" Content="&#xE106;" IsEnabled="False" FontFamily="Segoe UI Symbol" FontSize="25" Foreground="White" Width="60" Height="48" Click="Remove_Click_1" Grid.Column="3" HorizontalAlignment="Left" Margin="2,11,0,11" VerticalAlignment="Center" />
         </Grid>
-        <ListBox Name="listDictionaries" HorizontalAlignment="Stretch" FontSize="20" Margin="4" Grid.Row="2" VerticalAlignment="Stretch" DoubleTapped="listDictionaries_DoubleTapped" />
+        <ListBox Name="listDictionaries" HorizontalAlignment="Stretch" FontSize="35" Margin="60" Grid.Row="2" VerticalAlignment="Stretch" DoubleTapped="listDictionaries_DoubleTapped" Tapped="listDictionaries_Tapped" />
 
 
         <VisualStateManager.VisualStateGroups>

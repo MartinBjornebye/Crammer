@@ -24,11 +24,247 @@ namespace Crammer
     /// </summary>
     public sealed partial class ManageEntries : Crammer.Common.LayoutAwarePage
     {
+        #region Attributes
+        private DictionaryEntry mCurrentEntry = null;
+        private IEnumerable<DictionaryEntry> mMatchingEntries = null;
+        #endregion
+
         public ManageEntries()
         {
             this.InitializeComponent();
             setDictStats();
         }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if ((Application.Current as App).CurrentDictionary == null)
+                return;
+
+            //int currentEntry = (Application.Current as App).EntryEngine.CurrentEntry;
+            //if ( currentEntry < 0 || currentEntry >= (Application.Current as App).CurrentDictionary.Entries.Count )
+            //    return;
+
+            //mCurrentEntry = (Application.Current as App).CurrentDictionary.Entries[currentEntry];
+            //txtA.Text = mCurrentEntry.AEntry;
+            //txtB.Text = mCurrentEntry.BEntry;
+            //matchEntriesForInput();
+            //enableButtons(true);
+        }
+
+        private void txtA_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtA.Text))
+            {
+                matchEntriesForInput();
+
+                if (mMatchingEntries == null || mMatchingEntries.Count() == 0)
+                {
+                   save.IsEnabled = true;
+                   cancel.IsEnabled = true;
+                }
+                sub.IsEnabled = false;
+            }
+            else
+            {
+                listEntries.DataContext = null;
+            }
+        }
+
+        private void txtB_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //enableButtons(true);
+        }
+
+        /// <summary>
+        /// Searcher function which kicks in when a user starts to type in the Key field to find similar existing
+        /// sub-string matches in the dictionary. This will allow a user to easily determine if a new entry is unique.
+        /// </summary>
+        private void matchEntriesForInput()
+        {
+            if ((Application.Current as App).CurrentDictionary == null)
+                return;
+
+            mMatchingEntries = (Application.Current as App).CurrentDictionary.Entries.Where((c) => c.AEntry.ToLower().Contains(txtA.Text.ToLower()));
+            if (mMatchingEntries == null || mMatchingEntries.Count() == 0)
+            {
+                listEntries.DataContext = null;
+                return;
+            }
+
+            listEntries.DataContext = mMatchingEntries;
+            return;
+        }
+
+        async private void save_Click_1(object sender, RoutedEventArgs e)
+        {
+            // Do not allow a save if either of the entry values are empty
+            try
+            {
+                if ( string.IsNullOrEmpty(txtA.Text) ||
+                     string.IsNullOrEmpty(txtB.Text))
+                {
+                    var dlg = new Windows.UI.Popups.MessageDialog("An entry must contain two valid values. Cannot save");
+                    await dlg.ShowAsync();
+                    return;
+                }
+
+                if (mCurrentEntry == null)
+                {
+                    DictionaryEntry entry = new DictionaryEntry();
+                    entry.AEntry = txtA.Text;
+                    entry.BEntry = txtB.Text;
+                    (Application.Current as App).CurrentDictionary.addEntry(entry);
+                    await (Application.Current as App).CurrentDictionary.save(true);
+                }
+                else
+                {
+                    mCurrentEntry.AEntry = txtA.Text;
+                    mCurrentEntry.BEntry = txtB.Text;
+
+                    await (Application.Current as App).CurrentDictionary.save(true);
+
+                    mCurrentEntry = null;
+                    save.IsEnabled = false;
+                }
+                clearAfterChange();
+                enableButtons(false);
+                setDictStats();
+
+            }
+            catch (Exception ex)
+            {
+                if (this.Frame != null)
+                {
+                    this.Frame.Navigate(typeof(MessagePopup), ex.Message);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Remove entry as selected in the grid
+        /// </summary>
+        async private void sub_Click_1(object sender, RoutedEventArgs e)
+        {
+            if (listEntries.SelectedIndex < 0 )
+                return;
+
+            DictionaryEntry entry = listEntries.SelectedItem as DictionaryEntry;
+            if (entry == null)
+                return;
+
+            (Application.Current as App).CurrentDictionary.removeEntry(entry);
+            await (Application.Current as App).CurrentDictionary.save(true);
+
+            clearAfterChange();
+            setDictStats();
+            sub.IsEnabled = false;
+        }
+
+        private void cancel_Click_1(object sender, RoutedEventArgs e)
+        {
+            clearAfterChange();
+        }
+
+
+
+        private void showAll_Click_1(object sender, RoutedEventArgs e)
+        {
+            if (sub.IsEnabled == true)
+                sub.IsEnabled = false;
+
+            listEntries.DataContext = (Application.Current as App).CurrentDictionary.Entries;
+        }
+
+        private void asc_Click_1(object sender, RoutedEventArgs e)
+        {
+            if (sub.IsEnabled == true)
+                sub.IsEnabled = false;
+
+            listEntries.DataContext = from data in (Application.Current as App).CurrentDictionary.Entries
+                                      orderby data.AEntry ascending
+                                      select data;
+        }
+
+        private void desc_Click_1(object sender, RoutedEventArgs e)
+        {
+            if (sub.IsEnabled == true)
+                sub.IsEnabled = false;
+
+            listEntries.DataContext = from data in (Application.Current as App).CurrentDictionary.Entries
+                                      orderby data.AEntry descending
+                                      select data;
+        }
+
+
+
+        private void clearAfterChange()
+        {
+            txtA.Text = "";
+            txtB.Text = "";
+
+            enableButtons(false);
+            listEntries.DataContext = null;
+            mCurrentEntry = null;
+            if ((Application.Current as App).PageVisited != CrammerConstants.EDITED_ENTRIES)
+                (Application.Current as App).PageVisited = CrammerConstants.EDITED_ENTRIES;
+        }
+
+        private void enableButtons(bool enabled)
+        {
+            save.IsEnabled = enabled;
+            sub.IsEnabled = enabled;
+            cancel.IsEnabled = enabled;
+        }
+
+        private void setDictStats()
+        {
+            txtDictionaryTitle.Text = (Application.Current as App).CurrentDictionary.DictionaryTitle;
+            txtTotal.Text = (Application.Current as App).CurrentDictionary.Entries.Count.ToString();
+        }
+
+
+        private void listEntries_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            try
+            {
+                if (listEntries.SelectedItem == null)
+                    return;
+
+                mCurrentEntry = listEntries.SelectedItem as DictionaryEntry;
+                if (mCurrentEntry == null)
+                    return;
+
+                txtA.TextChanged -= this.txtA_TextChanged;
+                txtA.Text = mCurrentEntry.AEntry;
+                txtB.Text = mCurrentEntry.BEntry;
+                txtA.TextChanged += this.txtA_TextChanged;
+
+                enableButtons(true);
+
+            }
+            catch (Exception ex)
+            {
+                if (this.Frame != null)
+                {
+                    this.Frame.Navigate(typeof(MessagePopup), ex.Message);
+                }
+            }
+        }
+
+        private void listEntries_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (listEntries.SelectedIndex < 0)
+                return;
+
+            sub.IsEnabled = true;
+        }
+
+        private void GoBack(object sender, RoutedEventArgs e)
+        {
+            this.GoHome(this, null);
+        }
+
+
 
         /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
@@ -53,81 +289,6 @@ namespace Crammer
         {
         }
 
-        private void txtA_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(txtA.Text))
-            {
-                matchEntriesForInput();
-            }
-            else
-            {
-                listEntries.DataContext = null;
-            }
-        }
 
-        /// <summary>
-        /// Searcher function which kicks in when a user starts to type in the Key field to find similar existing
-        /// sub-string matches in the dictionary. This will allow a user to easily determine if a new entry is unique.
-        /// </summary>
-        private void matchEntriesForInput()
-        {
-            if ((Application.Current as App).CurrentDictionary == null)
-                return;
-
-            IEnumerable<DictionaryEntry> entries = (Application.Current as App).CurrentDictionary.Entries.Where((c) => c.AEntry.ToLower().Contains(txtA.Text.ToLower()));
-            if (entries == null || entries.Count() == 0)
-            {
-                listEntries.DataContext = null;
-                return;
-            }
-
-            listEntries.DataContext = entries;
-        }
-
-        /// <summary>
-        /// Add new entry
-        /// </summary>
-        private void add_Click_1(object sender, RoutedEventArgs e)
-        {
-            DictionaryEntry entry = new DictionaryEntry();
-            entry.AEntry = txtA.Text;
-            entry.BEntry = txtB.Text;
-            (Application.Current as App).CurrentDictionary.addEntry(entry);
-            clearAfterChange();
-        }
-
-        /// <summary>
-        /// Remove entry as selected in the grid
-        /// </summary>
-        private void sub_Click_1(object sender, RoutedEventArgs e)
-        {
-            if (listEntries.SelectedIndex < 0 )
-                return;
-
-            DictionaryEntry entry = listEntries.SelectedItem as DictionaryEntry;
-            if (entry == null)
-                return;
-
-            (Application.Current as App).CurrentDictionary.removeEntry(entry);
-
-            clearAfterChange();
-        }
-
-        private void clearAfterChange()
-        {
-            txtA.Text = "";
-            txtB.Text = "";
-            listEntries.DataContext = null;
-            if ((Application.Current as App).PageVisited != CrammerConstants.EDITED_ENTRIES)
-                (Application.Current as App).PageVisited = CrammerConstants.EDITED_ENTRIES;
-
-            setDictStats();
-        }
-
-        private void setDictStats()
-        {
-            txtDictionaryTitle.Text = (Application.Current as App).CurrentDictionary.DictionaryTitle;
-            txtTotal.Text = (Application.Current as App).CurrentDictionary.Entries.Count.ToString();
-        }
     }
 }

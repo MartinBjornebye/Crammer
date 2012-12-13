@@ -60,7 +60,14 @@ namespace Crammer
         {
             this.InitializeComponent();
 
-            //this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
+            Application.Current.Suspending += new SuspendingEventHandler(appSuspending);
+        }
+
+        // Ensure state is saved when and if program is closed or suspended
+        void appSuspending(Object sender,Windows.ApplicationModel.SuspendingEventArgs e)
+        {
+            if ((Application.Current as App).EntryEngine != null)
+                (Application.Current as App).EntryEngine.close();
         }
 
         private async void pageRoot_Loaded(object sender, RoutedEventArgs e)
@@ -546,11 +553,11 @@ namespace Crammer
             loadDictionaryAndPickFirstWord(true);
         }
 
-        private void menuShuffle_Tapped_1(object sender, TappedRoutedEventArgs e)
+        async private void menuShuffle_Tapped_1(object sender, TappedRoutedEventArgs e)
         {
             try
             {
-                shuffleIt();
+                await shuffleIt();
             }
             catch (Exception ex)
             {
@@ -564,11 +571,11 @@ namespace Crammer
             loadDictionaryAndPickFirstWord(true);
         }
 
-        private void menuSortAsc_Tapped_1(object sender, TappedRoutedEventArgs e)
+        async private void menuSortAsc_Tapped_1(object sender, TappedRoutedEventArgs e)
         {
             try
             {
-                sortAsc();
+                await sortAsc();
             }
             catch (Exception ex)
             {
@@ -582,11 +589,11 @@ namespace Crammer
             loadDictionaryAndPickFirstWord(true);
         }
 
-        private void menuSortDesc_Tapped_1(object sender, TappedRoutedEventArgs e)
+        async private void menuSortDesc_Tapped_1(object sender, TappedRoutedEventArgs e)
         {
             try
             {
-                sortDesc();
+                await sortDesc();
             }
             catch (Exception ex)
             {
@@ -600,11 +607,11 @@ namespace Crammer
             loadDictionaryAndPickFirstWord(true);
         }
 
-        private void menuTimeAscending_Tapped_1(object sender, TappedRoutedEventArgs e)
+        async private void menuTimeAscending_Tapped_1(object sender, TappedRoutedEventArgs e)
         {
             try
             {
-                sortTimeAsc();
+                await sortTimeAsc();
             }
             catch (Exception ex)
             {
@@ -618,11 +625,11 @@ namespace Crammer
             loadDictionaryAndPickFirstWord(true);
         }
 
-        private void menuTimeDescending_Tapped_1(object sender, TappedRoutedEventArgs e)
+        async private void menuTimeDescending_Tapped_1(object sender, TappedRoutedEventArgs e)
         {
             try
             {
-                sortTimeDesc();
+                await sortTimeDesc();
             }
             catch (Exception ex)
             {
@@ -636,8 +643,7 @@ namespace Crammer
             try
             {
                 (Application.Current as App).EntryEngine.toggleSequence();
-                loadDictionaryAndPickFirstWord(true);
-
+                advanceWord(false);
             }
             catch (Exception ex)
             {

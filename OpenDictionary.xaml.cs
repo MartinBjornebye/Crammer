@@ -128,5 +128,39 @@ namespace Crammer
         {
             OpenSelected_Click_1(sender, e);
         }
+
+        async private void Remove_Click_1(object sender, RoutedEventArgs e)
+        {
+            if ( listDictionaries.SelectedItem == null)
+                return;
+
+            string dictionaryFile = listDictionaries.SelectedItem as string;
+            if (dictionaryFile == null)
+                return;
+
+            if (ApplicationData.Current.LocalSettings.Values.ContainsKey(dictionaryFile))
+                ApplicationData.Current.LocalSettings.Values.Remove(dictionaryFile);
+
+            string dictPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, dictionaryFile);
+            try
+            {
+                StorageFile dictFile = await ApplicationData.Current.LocalFolder.GetFileAsync(dictionaryFile);
+                await dictFile.DeleteAsync();
+            }
+            catch (FileNotFoundException)
+            {
+            }
+
+            listDictionaries.Items.Remove(dictionaryFile);
+            Remove.IsEnabled = false;
+        }
+
+        private void listDictionaries_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (listDictionaries.SelectedItem == null)
+                return;
+
+            Remove.IsEnabled = true;
+        }
     }
 }

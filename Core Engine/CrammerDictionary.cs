@@ -112,7 +112,7 @@ namespace MB.Crammer
                 throw new Exception("No dictionary name given");
 
             mDictionaryFile = dictionary;
-            createStateFile(dictionary);
+            createStateFile();
 
             mDictionary = XElement.Load(dictionary);
             getDictionaryTitle();
@@ -149,24 +149,17 @@ namespace MB.Crammer
         /// </summary>
         async public Task save(bool truncateStateFile)
         {
-            try
+            if (string.IsNullOrEmpty(mDictionaryFile))
+                throw new Exception("This dictionary does not have a file name and is not valid");
+
+            await removeDictionaryFile();
+
+            if (truncateStateFile)
             {
-                if (string.IsNullOrEmpty(mDictionaryFile))
-                    throw new Exception("This dictionary does not have a file name and is not valid");
-
-                await removeDictionaryFile();
-
-                if (truncateStateFile)
-                {
-                    removeStateFile();
-                }
-
-                await create(mDictionaryFile);
+                removeStateFile();
             }
-            catch (Exception)
-            {
 
-            }
+            await create(mDictionaryFile);
         }
 
         /// <summary>
@@ -199,6 +192,16 @@ namespace MB.Crammer
             await FileIO.WriteTextAsync(dictionaryStorage, dictionaryFileXML.ToString());
         }
 
+        public void createStateFile()
+        {
+            if (string.IsNullOrEmpty(mDictionaryFile))
+                throw new Exception("Dictionary file-path not provided. Cannot create a state-file");
+
+            // Derive a state file from dictionary
+            string tmpDir = Path.GetDirectoryName(mDictionaryFile);
+            string bareFileName = Path.GetFileNameWithoutExtension(mDictionaryFile) + STATE_MARKER;
+            mStateFile = Path.Combine(tmpDir, bareFileName) + STATE_FILE_EXT;
+        }
 
 
         async public Task removeDictionaryFile()
@@ -342,15 +345,6 @@ namespace MB.Crammer
                 throw new Exception("Failed to find a Title entry in the dictionary");
 
             mDictionaryTitle = title.Value;
-        }
-
-
-        private void createStateFile(string dictionary)
-        {
-            // Derive a state file from dictionary
-            string tmpDir = Path.GetDirectoryName(dictionary);
-            string bareFileName = Path.GetFileNameWithoutExtension(dictionary) + STATE_MARKER;
-            mStateFile = Path.Combine(tmpDir, bareFileName) + STATE_FILE_EXT;
         }
 
 
