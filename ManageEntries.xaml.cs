@@ -35,39 +35,44 @@ namespace Crammer
             setDictStats();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            if ((Application.Current as App).CurrentDictionary == null)
-                return;
-
-            //int currentEntry = (Application.Current as App).EntryEngine.CurrentEntry;
-            //if ( currentEntry < 0 || currentEntry >= (Application.Current as App).CurrentDictionary.Entries.Count )
-            //    return;
-
-            //mCurrentEntry = (Application.Current as App).CurrentDictionary.Entries[currentEntry];
-            //txtA.Text = mCurrentEntry.AEntry;
-            //txtB.Text = mCurrentEntry.BEntry;
-            //matchEntriesForInput();
-            //enableButtons(true);
-        }
-
         private void txtA_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtA.Text))
+            try
             {
-                matchEntriesForInput();
-
-                if (mMatchingEntries == null || mMatchingEntries.Count() == 0)
+                if (!string.IsNullOrEmpty(txtA.Text) )
                 {
-                   save.IsEnabled = true;
-                   cancel.IsEnabled = true;
+                    save.IsEnabled = true;
+                    cancel.IsEnabled = true;
+                    if (txtA.Text.Length > 1)
+                    {
+                        waitRing.IsActive = true;
+                        matchEntriesForInput();
+                        //if (mMatchingEntries == null || mMatchingEntries.Count() == 0)
+                        //{
+                        //save.IsEnabled = true;
+                        //cancel.IsEnabled = true;
+                        //}
+                        sub.IsEnabled = false;
+                    }
                 }
-                sub.IsEnabled = false;
+                else
+                {
+                    listEntries.DataContext = null;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                listEntries.DataContext = null;
+                waitRing.IsActive = false;
+                if (this.Frame != null)
+                {
+                    this.Frame.Navigate(typeof(MessagePopup), ex.Message);
+                }
             }
+            finally
+            {
+                waitRing.IsActive = false;
+            }
+
         }
 
         private void txtB_TextChanged(object sender, TextChangedEventArgs e)
@@ -95,12 +100,12 @@ namespace Crammer
             return;
         }
 
-        async private void save_Click_1(object sender, RoutedEventArgs e)
+        private async void save_Click_1(object sender, RoutedEventArgs e)
         {
             // Do not allow a save if either of the entry values are empty
             try
             {
-                if ( string.IsNullOrEmpty(txtA.Text) ||
+                if (string.IsNullOrEmpty(txtA.Text) ||
                      string.IsNullOrEmpty(txtB.Text))
                 {
                     var dlg = new Windows.UI.Popups.MessageDialog("An entry must contain two valid values. Cannot save");
@@ -108,6 +113,7 @@ namespace Crammer
                     return;
                 }
 
+                waitRing.IsActive = true;
                 if (mCurrentEntry == null)
                 {
                     DictionaryEntry entry = new DictionaryEntry();
@@ -129,14 +135,18 @@ namespace Crammer
                 clearAfterChange();
                 enableButtons(false);
                 setDictStats();
-
             }
             catch (Exception ex)
             {
+                waitRing.IsActive = false;
                 if (this.Frame != null)
                 {
                     this.Frame.Navigate(typeof(MessagePopup), ex.Message);
                 }
+            }
+            finally
+            {
+                waitRing.IsActive = false;
             }
         }
 

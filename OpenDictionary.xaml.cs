@@ -92,35 +92,52 @@ namespace Crammer
             this.GoHome(this, null);
         }
 
-        async private void OpenExternal_Click_1(object sender, RoutedEventArgs e)
+        private async void OpenExternal_Click_1(object sender, RoutedEventArgs e)
         {
-            if (Windows.UI.ViewManagement.ApplicationView.Value != Windows.UI.ViewManagement.ApplicationViewState.Snapped ||
-                Windows.UI.ViewManagement.ApplicationView.TryUnsnap() == true)
+            try
             {
-                Windows.Storage.Pickers.FileOpenPicker openPicker = new Windows.Storage.Pickers.FileOpenPicker();
-                openPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
-                //openPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.
-                openPicker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+                if (Windows.UI.ViewManagement.ApplicationView.Value != Windows.UI.ViewManagement.ApplicationViewState.Snapped ||
+                     Windows.UI.ViewManagement.ApplicationView.TryUnsnap() == true)
+                {
+                    Windows.Storage.Pickers.FileOpenPicker openPicker = new Windows.Storage.Pickers.FileOpenPicker();
+                    openPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+                    //openPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.
+                    openPicker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
 
-                // Filter to include a sample subset of file types.
-                openPicker.FileTypeFilter.Clear();
-                openPicker.FileTypeFilter.Add(CrammerDictionary.DICT_EXTENSION);
+                    // Filter to include a sample subset of file types.
+                    openPicker.FileTypeFilter.Clear();
+                    openPicker.FileTypeFilter.Add(CrammerDictionary.DICT_EXTENSION);
 
-                // Open the file picker.
-                Windows.Storage.StorageFile file = await openPicker.PickSingleFileAsync();
+                    // Open the file picker.
+                    Windows.Storage.StorageFile file = await openPicker.PickSingleFileAsync();
 
-                // file is null if user cancels the file picker.
-                if (file == null)
-                    return;
+                    waitRing.IsActive = true;
 
-                StorageFile dictFile = await file.CopyAsync(ApplicationData.Current.LocalFolder, Path.GetFileName(file.Path), NameCollisionOption.ReplaceExisting);
+                    // file is null if user cancels the file picker.
+                    if (file == null)
+                        return;
 
-                CrammerDictionary crammerDict = (Application.Current as App).CurrentDictionary;
-                crammerDict.DictionaryFile = dictFile.Path;
-                (Application.Current as App).Settings.CurrentDictionary = dictFile.Path;
-                (Application.Current as App).Settings.save();
+                    StorageFile dictFile = await file.CopyAsync(ApplicationData.Current.LocalFolder, Path.GetFileName(file.Path), NameCollisionOption.ReplaceExisting);
 
-                this.GoHome(this, null);
+                    CrammerDictionary crammerDict = (Application.Current as App).CurrentDictionary;
+                    crammerDict.DictionaryFile = dictFile.Path;
+                    (Application.Current as App).Settings.CurrentDictionary = dictFile.Path;
+                    (Application.Current as App).Settings.save();
+
+                    this.GoHome(this, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                waitRing.IsActive = false;
+                if (this.Frame != null)
+                {
+                    this.Frame.Navigate(typeof(MessagePopup), ex.Message);
+                }
+            }
+            finally
+            {
+                waitRing.IsActive = false;
             }
         }
 
@@ -129,7 +146,7 @@ namespace Crammer
             OpenSelected_Click_1(sender, e);
         }
 
-        async private void Remove_Click_1(object sender, RoutedEventArgs e)
+        private async void Remove_Click_1(object sender, RoutedEventArgs e)
         {
             if ( listDictionaries.SelectedItem == null)
                 return;

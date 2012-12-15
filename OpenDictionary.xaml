@@ -28,6 +28,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <ProgressRing Name="waitRing" IsActive="False" Width="50" Height="50" Foreground="Blue" />
+        
         <!-- Back button and page title -->
         <Grid>
             <Grid.ColumnDefinitions>
