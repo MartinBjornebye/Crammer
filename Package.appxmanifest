@@ -16,10 +16,9 @@
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Crammer.App">
       <VisualElements DisplayName="Crammer - Smart Memorizer" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="Crammer - A tool that uses a smart algorithm to help you easily memorize" ForegroundText="light" BackgroundColor="#464646">
-        <DefaultTile ShowName="allLogos" />
+        <DefaultTile ShowName="allLogos" ShortName="Crammer" />
         <SplashScreen Image="Assets\SplashScreen.png" />
         <InitialRotationPreference>
-          <Rotation Preference="portrait" />
           <Rotation Preference="landscape" />
         </InitialRotationPreference>
       </VisualElements>

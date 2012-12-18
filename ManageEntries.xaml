@@ -95,7 +95,7 @@
                 <ColumnDefinition Width="933*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="Answer:" FontSize="30" HorizontalAlignment="Right" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" Height="36" />
-            <TextBox x:Name="txtB" Grid.Column="1" Text="" IsTabStop="True" HorizontalAlignment="Stretch" Margin="8" VerticalAlignment="Stretch" Foreground="Black" FontSize="20" TextChanged="txtB_TextChanged" />
+            <TextBox x:Name="txtB" Grid.Column="1" Text="" IsTabStop="True" HorizontalAlignment="Stretch" Margin="8" VerticalAlignment="Stretch" Foreground="Black" FontSize="20" />
         </Grid>
         <!-- ListView Name="listEntries" HorizontalAlignment="Stretch" Margin="8" Grid.Row="3" VerticalAlignment="Stretch" FontSize="40" FontWeight="Bold" >
         </ListView -->

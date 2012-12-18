@@ -195,7 +195,7 @@ namespace Crammer
             return (true);
         }
 
-        private async void openDictionary()
+        private async Task openImportFile()
         {
             try
             {
@@ -232,9 +232,9 @@ namespace Crammer
         }
 
 
-        private void cmdBrowseForInputFile_Click_1(object sender, RoutedEventArgs e)
+        private async void cmdBrowseForInputFile_Click_1(object sender, RoutedEventArgs e)
         {
-            openDictionary();
+            await openImportFile();
         }
 
 

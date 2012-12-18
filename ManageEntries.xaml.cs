@@ -35,6 +35,12 @@ namespace Crammer
             setDictStats();
         }
 
+        /// <summary>
+        /// Trigger auto lookup based on the string being entered. Lookup starts to be triggered once entered string
+        /// is greater than 1.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txtA_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
@@ -75,10 +81,6 @@ namespace Crammer
 
         }
 
-        private void txtB_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //enableButtons(true);
-        }
 
         /// <summary>
         /// Searcher function which kicks in when a user starts to type in the Key field to find similar existing
@@ -119,6 +121,16 @@ namespace Crammer
                     DictionaryEntry entry = new DictionaryEntry();
                     entry.AEntry = txtA.Text;
                     entry.BEntry = txtB.Text;
+
+                    if ((Application.Current as App).CurrentDictionary.entryExists(entry))
+                    {
+                        var dlg = new Windows.UI.Popups.MessageDialog("Entry already exists and will not be added");
+                        await dlg.ShowAsync();
+                        txtA.Text = "";
+                        txtB.Text = "";
+                        return;
+                    }
+
                     (Application.Current as App).CurrentDictionary.addEntry(entry);
                     await (Application.Current as App).CurrentDictionary.save(true);
                 }

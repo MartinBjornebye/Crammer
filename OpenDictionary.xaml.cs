@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using System.Threading.Tasks;
 
 using MB.Crammer;
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
@@ -87,45 +88,22 @@ namespace Crammer
             CrammerDictionary crammerDict = (Application.Current as App).CurrentDictionary;
             crammerDict.DictionaryFile = Path.Combine(ApplicationData.Current.LocalFolder.Path, dictionary);
             (Application.Current as App).Settings.CurrentDictionary = Path.Combine(ApplicationData.Current.LocalFolder.Path, dictionary);
+            if ((Application.Current as App).EntryEngine != null)
+                (Application.Current as App).EntryEngine.reset();
+
             (Application.Current as App).Settings.save();
 
             this.GoHome(this, null);
         }
 
+        /// <summary>
+        /// Allows users to pick up dictionary files from external sites.
+        /// </summary>
         private async void OpenExternal_Click_1(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (Windows.UI.ViewManagement.ApplicationView.Value != Windows.UI.ViewManagement.ApplicationViewState.Snapped ||
-                     Windows.UI.ViewManagement.ApplicationView.TryUnsnap() == true)
-                {
-                    Windows.Storage.Pickers.FileOpenPicker openPicker = new Windows.Storage.Pickers.FileOpenPicker();
-                    openPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
-                    //openPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.
-                    openPicker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
-
-                    // Filter to include a sample subset of file types.
-                    openPicker.FileTypeFilter.Clear();
-                    openPicker.FileTypeFilter.Add(CrammerDictionary.DICT_EXTENSION);
-
-                    // Open the file picker.
-                    Windows.Storage.StorageFile file = await openPicker.PickSingleFileAsync();
-
-                    waitRing.IsActive = true;
-
-                    // file is null if user cancels the file picker.
-                    if (file == null)
-                        return;
-
-                    StorageFile dictFile = await file.CopyAsync(ApplicationData.Current.LocalFolder, Path.GetFileName(file.Path), NameCollisionOption.ReplaceExisting);
-
-                    CrammerDictionary crammerDict = (Application.Current as App).CurrentDictionary;
-                    crammerDict.DictionaryFile = dictFile.Path;
-                    (Application.Current as App).Settings.CurrentDictionary = dictFile.Path;
-                    (Application.Current as App).Settings.save();
-
-                    this.GoHome(this, null);
-                }
+                await openExternalFile();
             }
             catch (Exception ex)
             {
@@ -138,6 +116,43 @@ namespace Crammer
             finally
             {
                 waitRing.IsActive = false;
+            }
+        }
+
+        /// <summary>
+        /// Handles the task of opening an externally located Crammer dictionary
+        /// </summary>
+        private async Task openExternalFile()
+        {
+            if (Windows.UI.ViewManagement.ApplicationView.Value != Windows.UI.ViewManagement.ApplicationViewState.Snapped ||
+                 Windows.UI.ViewManagement.ApplicationView.TryUnsnap() == true)
+            {
+                Windows.Storage.Pickers.FileOpenPicker openPicker = new Windows.Storage.Pickers.FileOpenPicker();
+                openPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+                //openPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.
+                openPicker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+
+                // Filter to include a sample subset of file types.
+                openPicker.FileTypeFilter.Clear();
+                openPicker.FileTypeFilter.Add(CrammerDictionary.DICT_EXTENSION);
+
+                // Open the file picker.
+                Windows.Storage.StorageFile file = await openPicker.PickSingleFileAsync();
+
+                waitRing.IsActive = true;
+
+                // file is null if user cancels the file picker.
+                if (file == null)
+                    return;
+
+                StorageFile dictFile = await file.CopyAsync(ApplicationData.Current.LocalFolder, Path.GetFileName(file.Path), NameCollisionOption.ReplaceExisting);
+
+                CrammerDictionary crammerDict = (Application.Current as App).CurrentDictionary;
+                crammerDict.DictionaryFile = dictFile.Path;
+                (Application.Current as App).Settings.CurrentDictionary = dictFile.Path;
+                (Application.Current as App).Settings.save();
+
+                this.GoHome(this, null);
             }
         }
 

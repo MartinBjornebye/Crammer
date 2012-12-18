@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Store;
 
 using MB.Crammer;
 
@@ -82,7 +83,10 @@ namespace Crammer
                     // Load Crammer settings
                     await (Application.Current as App).Settings.init();
 
-                    //mCurrentDictionary = (Application.Current as App).CurrentDictionary;
+                    CurrentApp.LicenseInformation.LicenseChanged += new LicenseChangedEventHandler(licenseChangedEventHandler);
+
+                    enableOptionsByLicenseStatus();
+                    
                     loadDictionaryAndPickFirstWord(false);
                 }
             }
@@ -98,10 +102,32 @@ namespace Crammer
 
         private void pageRoot_Unloaded(object sender, RoutedEventArgs e)
         {
-            (Application.Current as App).Settings.save();
+            CurrentApp.LicenseInformation.LicenseChanged -= new LicenseChangedEventHandler(licenseChangedEventHandler);
+            saveState();
         }
 
+        /// <summary>
+        /// Invoked if there is a license change from Windows Store
+        /// </summary>
+        private void licenseChangedEventHandler()
+        {
+            if (Windows.ApplicationModel.Store.CurrentApp.LicenseInformation.IsActive == true)
+            {
+                menuNewDict.IsEnabled = true;
+                menuEditDict.IsEnabled = true;
+                menuOpenDict.IsEnabled = true;
+            }
+        }
 
+        private void enableOptionsByLicenseStatus()
+        {
+            if (Windows.ApplicationModel.Store.CurrentAppSimulator.LicenseInformation.IsActive == false)
+            {
+                menuNewDict.IsEnabled = false;
+                menuEditDict.IsEnabled = false;
+                menuOpenDict.IsEnabled = false;
+            }
+        }
 
 
         /// <summary>
@@ -124,7 +150,9 @@ namespace Crammer
             }
         }
 
-
+        /// <summary>
+        /// Control being passed back to this page
+        /// </summary>
         async protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             try
@@ -189,11 +217,10 @@ namespace Crammer
         /// <param name="pageState">An empty dictionary to be populated with serializable state.</param>
         protected override void SaveState(Dictionary<String, Object> pageState)
         {
-            (Application.Current as App).Settings.save();
-
-            if ((Application.Current as App).EntryEngine != null)
-                (Application.Current as App).EntryEngine.saveState();
+            saveState();
         }
+
+        #region Main Button Handlers
 
         private void cmdNo_Click_1(object sender, RoutedEventArgs e)
         {
@@ -237,55 +264,6 @@ namespace Crammer
                 {
                     this.Frame.Navigate(typeof(MessagePopup), ex.Message);
                 }
-            }
-        }
-
-        private void menuNewDict_Tapped_1(object sender, TappedRoutedEventArgs e)
-        {
-            if (this.Frame != null)
-            {
-                this.Frame.Navigate(typeof(NewDictTitle));
-            }
-        }
-
-        private void openDictionary()
-        {
-            try
-            {
-                if (this.Frame != null)
-                {
-                    this.Frame.Navigate(typeof(OpenDictionary));
-                }
-            }
-            catch (Exception ex)
-            {
-                if (this.Frame != null)
-                {
-                    this.Frame.Navigate(typeof(MessagePopup), ex.Message);
-                }
-            }
-        }
-
-        private void menuOpenDict_Tapped_1(object sender, TappedRoutedEventArgs e)
-        {
-            try
-            {
-                openDictionary();
-            }
-            catch (Exception ex)
-            {
-                if (this.Frame != null)
-                {
-                    this.Frame.Navigate(typeof(MessagePopup), ex.Message);
-                }
-            }
-        }
-
-        private void menuEditDict_Tapped_1(object sender, TappedRoutedEventArgs e)
-        {
-            if (this.Frame != null)
-            {
-                this.Frame.Navigate(typeof(ManageEntries));
             }
         }
 
@@ -360,11 +338,6 @@ namespace Crammer
                     cleanState();
                     var dlg = new Windows.UI.Popups.MessageDialog("Congratulations! You have completed the dictionary.");
                     await dlg.ShowAsync();
-
-                    //if (this.Frame != null)
-                    //{
-                    //    this.Frame.Navigate(typeof(CompletedMessage));
-                    //}
                 }
                 else
                 {
@@ -382,7 +355,184 @@ namespace Crammer
             }
         }
 
+        #endregion
 
+        #region Left Menu Handlers
+
+        private void menuNewDict_Tapped_1(object sender, TappedRoutedEventArgs e)
+        {
+            if (this.Frame != null)
+            {
+                saveState();
+                this.Frame.Navigate(typeof(NewDictTitle));
+            }
+        }
+
+        private void menuOpenDict_Tapped_1(object sender, TappedRoutedEventArgs e)
+        {
+            try
+            {
+                openDictionary();
+            }
+            catch (Exception ex)
+            {
+                if (this.Frame != null)
+                {
+                    this.Frame.Navigate(typeof(MessagePopup), ex.Message);
+                }
+            }
+        }
+
+        private void openDictionary()
+        {
+            try
+            {
+                if (this.Frame != null)
+                {
+                    saveState();
+                    this.Frame.Navigate(typeof(OpenDictionary));
+                }
+            }
+            catch (Exception ex)
+            {
+                if (this.Frame != null)
+                {
+                    this.Frame.Navigate(typeof(MessagePopup), ex.Message);
+                }
+            }
+        }
+
+        private void menuEditDict_Tapped_1(object sender, TappedRoutedEventArgs e)
+        {
+            if (this.Frame != null)
+            {
+                this.Frame.Navigate(typeof(ManageEntries));
+            }
+        }
+
+        private void menuFlipSequence_Tapped_1(object sender, TappedRoutedEventArgs e)
+        {
+            try
+            {
+                (Application.Current as App).EntryEngine.toggleSequence();
+                advanceWord(false);
+            }
+            catch (Exception ex)
+            {
+                (Application.Current as App).ErrorMessage = ex.Message;
+            }
+        }
+
+        private void menuStartOver_Tapped_1(object sender, TappedRoutedEventArgs e)
+        {
+            try
+            {
+                cleanState();
+            }
+            catch (Exception ex)
+            {
+                (Application.Current as App).ErrorMessage = ex.Message;
+            }
+        }
+
+        #endregion
+
+        #region Right Menu Sort Handlers
+        private async Task shuffleIt()
+        {
+            await CurrentDictionary.randomShuffle();
+            loadDictionaryAndPickFirstWord(true);
+        }
+
+        async private void menuShuffle_Tapped_1(object sender, TappedRoutedEventArgs e)
+        {
+            try
+            {
+                await shuffleIt();
+            }
+            catch (Exception ex)
+            {
+                (Application.Current as App).ErrorMessage = ex.Message;
+            }
+        }
+
+        private async Task sortAsc()
+        {
+            await CurrentDictionary.sortAscending();
+            loadDictionaryAndPickFirstWord(true);
+        }
+
+        async private void menuSortAsc_Tapped_1(object sender, TappedRoutedEventArgs e)
+        {
+            try
+            {
+                await sortAsc();
+            }
+            catch (Exception ex)
+            {
+                (Application.Current as App).ErrorMessage = ex.Message;
+            }
+        }
+
+        private async Task sortDesc()
+        {
+            await CurrentDictionary.sortDescending();
+            loadDictionaryAndPickFirstWord(true);
+        }
+
+        async private void menuSortDesc_Tapped_1(object sender, TappedRoutedEventArgs e)
+        {
+            try
+            {
+                await sortDesc();
+            }
+            catch (Exception ex)
+            {
+                (Application.Current as App).ErrorMessage = ex.Message;
+            }
+        }
+
+        private async Task sortTimeAsc()
+        {
+            await CurrentDictionary.sortByTimestampAscending();
+            loadDictionaryAndPickFirstWord(true);
+        }
+
+        async private void menuTimeAscending_Tapped_1(object sender, TappedRoutedEventArgs e)
+        {
+            try
+            {
+                await sortTimeAsc();
+            }
+            catch (Exception ex)
+            {
+                (Application.Current as App).ErrorMessage = ex.Message;
+            }
+        }
+
+        private async Task sortTimeDesc()
+        {
+            await CurrentDictionary.sortByTimestampDescending();
+            loadDictionaryAndPickFirstWord(true);
+        }
+
+        async private void menuTimeDescending_Tapped_1(object sender, TappedRoutedEventArgs e)
+        {
+            try
+            {
+                await sortTimeDesc();
+            }
+            catch (Exception ex)
+            {
+                (Application.Current as App).ErrorMessage = ex.Message;
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Advances to the next word in the dictionary as determined by the picking algorithm
+        /// </summary>
         public async void advanceWord(bool newSession)
         {
             try
@@ -406,16 +556,6 @@ namespace Crammer
             catch (FinishedException)
             {
                 cleanState();
-
-                //(Application.Current as App).EntryEngine.reset();
-
-                //if (this.Frame != null)
-                //{
-                //    this.Frame.Navigate(typeof(CompletedMessage));
-                //}
-
-                //mEntryEngine.reset();
-                //advanceWord(true);
                 return;
             }
             catch (Exception ex)
@@ -536,6 +676,14 @@ namespace Crammer
             loadDictionaryAndPickFirstWord(true);
         }
 
+
+        private void saveState()
+        {
+            (Application.Current as App).Settings.save();
+            if ((Application.Current as App).EntryEngine != null)
+                (Application.Current as App).EntryEngine.saveState();
+        }
+
         private void clearUIFields()
         {
             mInSystem = "";
@@ -545,122 +693,6 @@ namespace Crammer
             txtActive.Text = "0";
             //labelCompleted.Text = "0";
             txtOut.Text = "";
-        }
-
-        private async Task shuffleIt()
-        {
-            await CurrentDictionary.randomShuffle();
-            loadDictionaryAndPickFirstWord(true);
-        }
-
-        async private void menuShuffle_Tapped_1(object sender, TappedRoutedEventArgs e)
-        {
-            try
-            {
-                await shuffleIt();
-            }
-            catch (Exception ex)
-            {
-                (Application.Current as App).ErrorMessage = ex.Message;
-            }
-        }
-
-        private async Task sortAsc()
-        {
-            await CurrentDictionary.sortAscending();
-            loadDictionaryAndPickFirstWord(true);
-        }
-
-        async private void menuSortAsc_Tapped_1(object sender, TappedRoutedEventArgs e)
-        {
-            try
-            {
-                await sortAsc();
-            }
-            catch (Exception ex)
-            {
-                (Application.Current as App).ErrorMessage = ex.Message;
-            }
-        }
-
-        private async Task sortDesc()
-        {
-            await CurrentDictionary.sortDescending();
-            loadDictionaryAndPickFirstWord(true);
-        }
-
-        async private void menuSortDesc_Tapped_1(object sender, TappedRoutedEventArgs e)
-        {
-            try
-            {
-                await sortDesc();
-            }
-            catch (Exception ex)
-            {
-                (Application.Current as App).ErrorMessage = ex.Message;
-            }
-        }
-
-        private async Task sortTimeAsc()
-        {
-            await CurrentDictionary.sortByTimestampAscending();
-            loadDictionaryAndPickFirstWord(true);
-        }
-
-        async private void menuTimeAscending_Tapped_1(object sender, TappedRoutedEventArgs e)
-        {
-            try
-            {
-                await sortTimeAsc();
-            }
-            catch (Exception ex)
-            {
-                (Application.Current as App).ErrorMessage = ex.Message;
-            }
-        }
-
-        private async Task sortTimeDesc()
-        {
-            await CurrentDictionary.sortByTimestampDescending();
-            loadDictionaryAndPickFirstWord(true);
-        }
-
-        async private void menuTimeDescending_Tapped_1(object sender, TappedRoutedEventArgs e)
-        {
-            try
-            {
-                await sortTimeDesc();
-            }
-            catch (Exception ex)
-            {
-                (Application.Current as App).ErrorMessage = ex.Message;
-            }
-        }
-
-
-        private void menuFlipSequence_Tapped_1(object sender, TappedRoutedEventArgs e)
-        {
-            try
-            {
-                (Application.Current as App).EntryEngine.toggleSequence();
-                advanceWord(false);
-            }
-            catch (Exception ex)
-            {
-                (Application.Current as App).ErrorMessage = ex.Message;
-            }
-        }
-
-        private void menuStartOver_Tapped_1(object sender, TappedRoutedEventArgs e)
-        {
-            try
-            {
-                cleanState();
-            }
-            catch (Exception ex)
-            {
-                (Application.Current as App).ErrorMessage = ex.Message;
-            }
         }
 
 
