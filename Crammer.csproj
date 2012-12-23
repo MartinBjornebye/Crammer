@@ -12,7 +12,9 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>Crammer_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>Crammer_StoreKey.pfx</PackageCertificateKeyFile>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <PackageCertificateThumbprint>C221FF76AE795439B1E68084E3E1C0D145F7BC67</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -150,6 +152,7 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="ClassDiagram1.cd" />
+    <None Include="Crammer_StoreKey.pfx" />
     <None Include="Crammer_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -161,8 +164,12 @@
     <Content Include="Assets\SmallLogo.png" />
     <Content Include="Assets\SplashScreen.png" />
     <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\StoreLogo.scale-140.png" />
+    <Content Include="Assets\StoreLogo.scale-180.png" />
     <Content Include="Common\ReadMe.txt" />
     <Content Include="Images\WarningFlag.png" />
+    <None Include="Package.StoreAssociation.xml" />
     <Page Include="CompletedMessage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

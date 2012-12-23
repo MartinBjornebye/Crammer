@@ -121,9 +121,9 @@
                         <ColumnDefinition Width="50*"/>
                         <ColumnDefinition Width="50*"/>
                     </Grid.ColumnDefinitions>
-                        <Button Content="No" x:Name="cmdNo" Background="#0A4BB3" Foreground="White" Grid.Column="0" FontSize="28" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Center" Height="57" Width="150" Click="cmdNo_Click_1" RenderTransformOrigin="0.5,0.5" />
-                        <Button Content="Verify" x:Name="cmdVerify" Background="#0A4BB3" Foreground="White" Grid.Column="1" FontSize="28" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center" Height="57" Width="150" Click="cmdVerify_Click_1" />
-                        <Button Content="Yes" x:Name="cmdYes" Background="#0A4BB3" Foreground="White" Grid.Column="2" FontSize="28" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center" Height="57" Width="150" Click="cmdYes_Click_1" />
+                        <Button Content="Don't Know" x:Name="cmdNo" Background="#0A4BB3" Foreground="White" Grid.Column="0" FontSize="28" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Center" Height="70" Width="180" Click="cmdNo_Click_1" RenderTransformOrigin="0.5,0.5" />
+                        <Button Content="Verify" x:Name="cmdVerify" Background="#0A4BB3" Foreground="White" Grid.Column="1" FontSize="28" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center" Height="70" Width="180" Click="cmdVerify_Click_1" />
+                        <Button Content="OK" x:Name="cmdYes" Background="#0A4BB3" Foreground="White" Grid.Column="2" FontSize="28" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center" Height="70" Width="180" Click="cmdYes_Click_1" />
                 </Grid>
             </Grid>
             </Border>

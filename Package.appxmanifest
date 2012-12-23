@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="7d8f80ab-29a2-48c8-ab77-77134b579fe2" Publisher="CN=Martin" Version="1.0.0.0" />
+  <Identity Name="4364E8AAFD40.Crammer" Publisher="CN=F3CC45F3-2807-455E-8458-2FC6271C5402" Version="1.0.0.0" />
   <Properties>
     <DisplayName>Crammer</DisplayName>
-    <PublisherDisplayName>Martin</PublisherDisplayName>
+    <PublisherDisplayName>Gramcore Ltd.</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>
