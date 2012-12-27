@@ -54,7 +54,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <CheckBox Grid.Column="0" Name="chkHaveImportFile" Click="chkHaveImportFile_Click_1" Content="Yes I have an import file" Height="40" VerticalAlignment="Center" IsChecked="False" FontSize="16" Margin="10,20" />
-                <Button Content="..." Background="#FF063C93" Foreground="White" Name="cmdBrowseForInputFile" Click="cmdBrowseForInputFile_Click_1" FontSize="20" Grid.Column="1" IsEnabled="False" HorizontalAlignment="Left" Margin="8,16,0,23" VerticalAlignment="Center" Height="41" Width="45"/>
+                <Button Content="..." Background="#FF063C93" Foreground="White" Name="cmdBrowseForInputFile" Click="cmdBrowseForInputFile_Click_1" FontSize="20" Grid.Column="1" IsEnabled="False" HorizontalAlignment="Left" Margin="8,16,0,23" VerticalAlignment="Center" Height="41" Width="45" ToolTipService.ToolTip="Browse for Import File"/>
                 <TextBlock Name="txtImportFile" Grid.Column="2" Text="" Margin="2,25"  FontSize="20" VerticalAlignment="Center" Height="30"/>
                 <Button Content="Finish" Background="#FF063C93" Foreground="White" Name="cmdNext" Click="cmdNext_Click_1" FontSize="20" FontWeight="Bold" Grid.Column="3" HorizontalAlignment="Left" Margin="8,16,0,23" VerticalAlignment="Center" Height="41" Width="90" Grid.ColumnSpan="2"/>
             </Grid>
@@ -62,9 +62,9 @@
                 <StackPanel>
                     <TextBlock Text="Separator Type:"></TextBlock>
                     <StackPanel Orientation="Horizontal" Margin="4">
-                        <RadioButton Name="rbCSV" Content="CSV" IsChecked="True" FontSize="16" FontWeight="Bold" Margin="8"></RadioButton>
-                        <RadioButton Name="rbCustom" Content="Custom" FontSize="16" FontWeight="Bold" Margin="8"></RadioButton>
-                        <TextBox Name="txtCustomSeparator" Width="200" Height="40" Margin="4"></TextBox>
+                        <RadioButton Name="rbCSV" Content="CSV" IsChecked="True" FontSize="16" FontWeight="Bold" Margin="8" ToolTipService.ToolTip="Import from a Text-File Containing Semi-Colon Delimited Entries"></RadioButton>
+                        <RadioButton Name="rbCustom" Content="Custom" FontSize="16" FontWeight="Bold" Margin="8" ToolTipService.ToolTip="Import from a Text-File Using Special Symbol(s) to Delimit Entries"></RadioButton>
+                        <TextBox Name="txtCustomSeparator" Width="200" Height="40" Margin="4" ToolTipService.ToolTip="Describe Custom Delimiter Symbol(s)"></TextBox>
                     </StackPanel>
                 </StackPanel>
             </Frame>

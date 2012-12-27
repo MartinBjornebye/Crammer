@@ -141,14 +141,13 @@ namespace Crammer
         private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            //TODO: Save application state and stop any background activity
+
+            if (mEntryEngine != null)
+                mEntryEngine.saveState();
+
             deferral.Complete();
 
             await Crammer.Common.SuspensionManager.SaveAsync();
-
-            //if (mEntryEngine != null)
-            //    mEntryEngine.saveState();
-
         }
 
     }

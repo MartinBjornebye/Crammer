@@ -50,12 +50,12 @@
             <!-- Button x:Name="backButton" Grid.Column="0"  Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="10,0,0,40"/ -->
             <Button x:Name="backButton" Grid.Column="0"  Click="GoBack" Style="{StaticResource BackButtonStyle}" Margin="10,0,0,40"/>
             <TextBlock x:Name="pageTitle" Grid.Column="1" Text="{StaticResource AppName}" Foreground="#FF063C93" FontSize="60" Margin="0,40" />
-            <Button x:Name="save" Content="&#xE105;" IsEnabled="False" FontFamily="Segoe UI Symbol" FontSize="25" Width="60" Height="60" Background="#FF063C93" Foreground="White" FontWeight="Bold" Click="save_Click_1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,50,2,30"/>
-            <Button x:Name="sub" Content="&#xE106;" IsEnabled="False" FontFamily="Segoe UI Symbol" FontSize="25" Width="60" Height="60" Background="#FF063C93" Foreground="White" FontWeight="Bold" Click="sub_Click_1" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,50,2,30"/>
-            <Button x:Name="cancel" Content="&#xE10E;" IsEnabled="False" FontFamily="Segoe UI Symbol" FontSize="25" Width="60" Height="60" Background="#FF063C93" Foreground="White" FontWeight="Bold" Click="cancel_Click_1" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,50,2,30" />
-            <Button x:Name="showAll" Content="&#xE14C;" FontFamily="Segoe UI Symbol" FontSize="25" Width="60" Height="60" Background="#FF063C93" Foreground="White" FontWeight="Bold" Click="showAll_Click_1" Grid.Column="6" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,50,2,30" />
-            <Button x:Name="asc" Content="&#xE183;" FontFamily="Segoe UI Symbol" FontSize="25" Width="60" Height="60" Background="#FF063C93" Foreground="White" FontWeight="Bold" Click="asc_Click_1" Grid.Column="7" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,50,2,30" />
-            <Button x:Name="desc" Content="&#xE118;" FontFamily="Segoe UI Symbol" FontSize="25" Width="60" Height="60" Background="#FF063C93" Foreground="White" FontWeight="Bold" Click="desc_Click_1" Grid.Column="8" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,50,2,30" />
+            <Button x:Name="save" Content="&#xE105;" IsEnabled="False" FontFamily="Segoe UI Symbol" FontSize="25" Width="60" Height="60" Background="#FF063C93" Foreground="White" FontWeight="Bold" Click="save_Click_1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,50,2,30" ToolTipService.ToolTip="Save Changes"/>
+            <Button x:Name="sub" Content="&#xE106;" IsEnabled="False" FontFamily="Segoe UI Symbol" FontSize="25" Width="60" Height="60" Background="#FF063C93" Foreground="White" FontWeight="Bold" Click="sub_Click_1" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,50,2,30" ToolTipService.ToolTip="Delete Entry"/>
+            <Button x:Name="cancel" Content="&#xE10E;" IsEnabled="False" FontFamily="Segoe UI Symbol" FontSize="25" Width="60" Height="60" Background="#FF063C93" Foreground="White" FontWeight="Bold" Click="cancel_Click_1" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,50,2,30" ToolTipService.ToolTip="Undo and Clear Changes" />
+            <Button x:Name="showAll" Content="&#xE14C;" FontFamily="Segoe UI Symbol" FontSize="25" Width="60" Height="60" Background="#FF063C93" Foreground="White" FontWeight="Bold" Click="showAll_Click_1" Grid.Column="6" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,50,2,30" ToolTipService.ToolTip="Show All Entries" />
+            <Button x:Name="asc" Content="&#xE183;" FontFamily="Segoe UI Symbol" FontSize="25" Width="60" Height="60" Background="#FF063C93" Foreground="White" FontWeight="Bold" Click="asc_Click_1" Grid.Column="7" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,50,2,30" ToolTipService.ToolTip="Sort Ascending" />
+            <Button x:Name="desc" Content="&#xE118;" FontFamily="Segoe UI Symbol" FontSize="25" Width="60" Height="60" Background="#FF063C93" Foreground="White" FontWeight="Bold" Click="desc_Click_1" Grid.Column="8" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,50,2,30" ToolTipService.ToolTip="Sort Descending" />
             <Grid Grid.Column="9">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -87,7 +87,7 @@
                 <ColumnDefinition Width="933*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="Question:" FontSize="30" HorizontalAlignment="Right" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" Height="36" />
-            <TextBox x:Name="txtA" Grid.Column="1" Text="" IsTabStop="True" HorizontalAlignment="Stretch" Margin="8" VerticalAlignment="Stretch" Foreground="Black" TextChanged="txtA_TextChanged" FontSize="20" />
+            <TextBox x:Name="txtA" Grid.Column="1" Text="" IsTabStop="True" HorizontalAlignment="Stretch" Margin="8" VerticalAlignment="Stretch" Foreground="Black" TextChanged="txtA_TextChanged" FontSize="20" ToolTipService.ToolTip="Type in a New Question or Search for Existing" />
         </Grid>
         <Grid Grid.Row="2" Background="#FF063C93" Margin="2">
             <Grid.ColumnDefinitions>
@@ -95,7 +95,7 @@
                 <ColumnDefinition Width="933*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="Answer:" FontSize="30" HorizontalAlignment="Right" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" Height="36" />
-            <TextBox x:Name="txtB" Grid.Column="1" Text="" IsTabStop="True" HorizontalAlignment="Stretch" Margin="8" VerticalAlignment="Stretch" Foreground="Black" FontSize="20" />
+            <TextBox x:Name="txtB" Grid.Column="1" Text="" IsTabStop="True" HorizontalAlignment="Stretch" Margin="8" VerticalAlignment="Stretch" Foreground="Black" FontSize="20" ToolTipService.ToolTip="Type in an Answer Value" />
         </Grid>
         <!-- ListView Name="listEntries" HorizontalAlignment="Stretch" Margin="8" Grid.Row="3" VerticalAlignment="Stretch" FontSize="40" FontWeight="Bold" >
         </ListView -->

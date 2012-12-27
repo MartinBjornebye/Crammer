@@ -127,13 +127,13 @@ namespace Crammer
         {
             if (Windows.ApplicationModel.Store.CurrentApp.LicenseInformation.IsActive == false)
             {
-                menuNewDict.IsEnabled = false;
-                menuEditDict.IsEnabled = false;
-                menuOpenDict.IsEnabled = false;
+                //menuNewDict.IsEnabled = false;
+                //menuEditDict.IsEnabled = false;
+                //menuOpenDict.IsEnabled = false;
 
-                menuNewDict.Foreground = new SolidColorBrush(Windows.UI.Colors.LightGray);
-                menuEditDict.Foreground = new SolidColorBrush(Windows.UI.Colors.LightGray);
-                menuOpenDict.Foreground = new SolidColorBrush(Windows.UI.Colors.LightGray);
+                //menuNewDict.Foreground = new SolidColorBrush(Windows.UI.Colors.LightGray);
+                //menuEditDict.Foreground = new SolidColorBrush(Windows.UI.Colors.LightGray);
+                //menuOpenDict.Foreground = new SolidColorBrush(Windows.UI.Colors.LightGray);
             }
         }
 

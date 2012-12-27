@@ -37,9 +37,8 @@
                 <ColumnDefinition Width="300"/>
                 <ColumnDefinition Width="605*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Grid.Column="0" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="25,0,0,28" Height="56" Width="65"/>
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Grid.ColumnSpan="3" Text="{StaticResource AppName}" Foreground="#FF063C93" Height="60" FontSize="60" />
-            <TextBlock Grid.Column="1" Text="Smart Memorizer" Grid.ColumnSpan="3" Margin="8"  FontSize="20" Foreground="#FF04388B" VerticalAlignment="Bottom" Height="24"/>
+            <TextBlock x:Name="pageTitle" Grid.Column="0" Margin="22,1,1,1"  Grid.ColumnSpan="3" Text="{StaticResource AppName}" Foreground="#FF063C93" Height="60" FontSize="60" />
+            <TextBlock Grid.Column="0" Text="Smart Memorizer" Grid.ColumnSpan="3" Margin="28,1,1,1"  FontSize="20" Foreground="#FF04388B" VerticalAlignment="Bottom" Height="24"/>
             <Grid Grid.Column="3">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -165,20 +164,11 @@
                 <VisualState x:Name="Filled"/>
 
                 <!-- The entire page respects the narrower 100-pixel margin convention for portrait -->
-                <VisualState x:Name="FullScreenPortrait">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PortraitBackButtonStyle}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
+                <VisualState x:Name="FullScreenPortrait"/>
 
                 <!-- The back button and title have different styles when snapped -->
                 <VisualState x:Name="Snapped">
                     <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedBackButtonStyle}"/>
-                        </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="pageTitle" Storyboard.TargetProperty="Style">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedPageHeaderTextStyle}"/>
                         </ObjectAnimationUsingKeyFrames>
