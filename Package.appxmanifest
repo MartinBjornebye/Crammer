@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="4364E8AAFD40.Crammer" Publisher="CN=F3CC45F3-2807-455E-8458-2FC6271C5402" Version="1.0.0.0" />
+  <Identity Name="4364E8AAFD40.Crammer" Publisher="CN=F3CC45F3-2807-455E-8458-2FC6271C5402" Version="1.0.0.3" />
   <Properties>
     <DisplayName>Crammer</DisplayName>
     <PublisherDisplayName>Gramcore Ltd.</PublisherDisplayName>

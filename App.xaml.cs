@@ -14,6 +14,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Reflection;
+using Windows.UI.ApplicationSettings;
+using System.Threading.Tasks;
 
 using MB.Crammer;
 
@@ -26,6 +28,10 @@ namespace Crammer
     /// </summary>
     sealed partial class App : Application
     {
+        #region Constants
+        private const string CRAMMER_PRIVACY_POLICY = "http://home.online.no/~martinb/Policy/index.htm";
+        #endregion
+
         #region Attributes
         public MainPage rootPage = null;
         private SettingsFile mSettings = new SettingsFile();
@@ -150,5 +156,22 @@ namespace Crammer
             await Crammer.Common.SuspensionManager.SaveAsync();
         }
 
+
+        protected override void OnWindowCreated(WindowCreatedEventArgs args)
+        {
+            // Place your CommandsRequested handler here to ensure your settings are available at all times in your app
+            SettingsPane.GetForCurrentView().CommandsRequested += onCommandsRequested;
+        }
+
+
+        private void onCommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
+        {
+            args.Request.ApplicationCommands.Add(
+                    new SettingsCommand("privpolicy", "Crammer Privacy Policy",
+                                        async a =>
+                    {
+                        await Windows.System.Launcher.LaunchUriAsync(new Uri(CRAMMER_PRIVACY_POLICY));
+                    }));
+        }
     }
 }

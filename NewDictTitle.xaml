@@ -45,7 +45,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="dictTitle" Grid.Column="0" Text="Dictionary Name:" Foreground="#FF063C93" FontSize="40" HorizontalAlignment="Right" Margin="8" VerticalAlignment="Center"/>
             <TextBox Name="txtDictTitle" Grid.Column="1" HorizontalAlignment="Stretch" Margin="6" Text="" VerticalAlignment="Center" FontSize="20"/>
-            <Button Content=">" Grid.Column="2" Name="Next" Click="Next_Click_1" FontSize="25" Width="60" Height="50" Background="#FF063C93" Foreground="White" FontWeight="Bold" HorizontalAlignment="Left" Margin="4" VerticalAlignment="Center"/>
+            <Button Content="&#x279C;" Grid.Column="2" Name="Next" Click="Next_Click_1" FontSize="25" Width="55" Height="50" Background="#FF063C93" Foreground="White" FontWeight="Bold" HorizontalAlignment="Left" Margin="4" VerticalAlignment="Center"/>
 
         </Grid>
 
